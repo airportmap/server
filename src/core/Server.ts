@@ -13,9 +13,9 @@ import { join } from 'node:path';
 
 export default class Server {
 
-    private serverCfg?: ServerConfig;
-    private mods: Record< string, boolean > = {};
-    private debugCls?: Debug;
+    private serverConfig?: ServerConfig;
+    private mods: Record< string, any > = {};
+    private debugger?: Debug;
     private expressApp?: Application;
     private httpServer?: HttpServer;
 
@@ -26,9 +26,9 @@ export default class Server {
 
     public get path () : string { return this.PATH }
     public get env () : string { return this.ENV }
-    public get config () : ServerConfig { return this.serverCfg! }
+    public get config () : ServerConfig { return this.serverConfig! }
     public get enabledMods () : string[] { return Object.keys( this.mods ).filter( ( k ) => this.mods[ k ] ) }
-    public get debug () : Debug { return this.debugCls! }
+    public get debug () : Debug { return this.debugger! }
     public get app () : Application { return this.expressApp! }
     public get server () : HttpServer { return this.httpServer! }
 
@@ -43,8 +43,8 @@ export default class Server {
     private async loadConfig () : Promise< ServerConfig > {
 
         return deepmerge(
-            await loadYamlConfig< ServerConfig >( join( this.path, `conf/server.yml` ), 'server' ),
-            await loadYamlConfig< Partial< ServerConfig > >( join( this.path, `conf/server.${ this.env }.yml` ), 'server' )
+            await loadYamlConfig< ServerConfig >( join( this.path, `conf/server.yml` ) ),
+            await loadYamlConfig< Partial< ServerConfig > >( join( this.path, `conf/server.${ this.env }.yml` ) )
         ) as ServerConfig;
 
     }
@@ -59,15 +59,17 @@ export default class Server {
 
     private listen () : void {
 
-        if ( this.app ) this.httpServer = this.app.listen( this.config.port, this.config.host );
+        const { port = 3000, host } = this.config.server;
+
+        if ( this.app ) this.httpServer = this.app.listen( port, host );
         else this.debug.err( 'server', `Need to call server.init() first` );
 
     }
 
     public async init () : Promise< void > {
 
-        this.serverCfg = await this.loadConfig();
-        this.debugCls = new Debug ( this.config.debug );
+        this.serverConfig = await this.loadConfig();
+        this.debugger = new Debug ( this.config.server.debug );
         this.expressApp = express();
 
         await this.loadMods();
@@ -79,9 +81,10 @@ export default class Server {
         this.listen();
 
         this.server.on( 'connect', () => {
-            this.debug.log( 'server', `Airportmap server is running on port: ${ this.config.port }`, true );
-            this.debug.log( 'server', `Serving host: ${ this.config.host }` );
-            this.debug.log( 'server', `HTTPS enabled: ${ this.config.https ? 'yes' : 'no' }` );
+            const { port, host, https } = this.config.server;
+            this.debug.log( 'server', `Airportmap server is running on port: ${ port }`, true );
+            this.debug.log( 'server', `Serving host: ${ host }` );
+            this.debug.log( 'server', `HTTPS enabled: ${ https ? 'yes' : 'no' }` );
             this.debug.log( 'server', `Debugger enabled: ${ this.debug.enabled ? 'yes' : 'no' }` );
             this.debug.log( 'server', `Loaded modules: ${ this.enabledMods.join( ', ' ) }` );
         } );
