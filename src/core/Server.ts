@@ -1,6 +1,7 @@
 import type { ServerConfig } from '@airportmap/types';
 import { loadYamlConfig } from '@server/core/ConfigLoader';
 import { Debug } from '@server/core/Debug';
+import AssetLoader from '@server/helper/AssetLoader';
 import Renderer from '@server/helper/Renderer';
 import i18n from '@server/mods/I18n';
 import views from '@server/mods/Views';
@@ -18,6 +19,11 @@ export default class Server {
     private expressApp?: Application;
     private httpServer?: HttpServer;
 
+    private helper: {
+        assetLoader?: AssetLoader;
+        renderer?: Renderer;
+    };
+
     public get path () : string { return this.PATH }
     public get env () : string { return this.ENV }
     public get config () : ServerConfig { return this.serverCfg! }
@@ -26,7 +32,8 @@ export default class Server {
     public get app () : Application { return this.expressApp! }
     public get server () : HttpServer { return this.httpServer! }
 
-    public get renderer () : Renderer { return new Renderer ( this ) }
+    public get assetLoader () : AssetLoader { return this.helper.assetLoader ??= new AssetLoader ( this ) }
+    public get renderer () : Renderer { return this.helper.renderer ??= new Renderer ( this ) }
 
     constructor (
         private PATH: string,

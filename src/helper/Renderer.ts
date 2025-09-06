@@ -43,12 +43,9 @@ export default class Renderer {
             const globalContext = await this.globalContext( req );
 
             res.status( 200 ).render( template, {
-                ...globalContext,
-                ...data,
-                meta: {
-                    ...globalContext.meta,
-                    ...meta
-                }
+                ...globalContext, ...data,
+                assets: this.server.assetLoader.assets( assets ),
+                meta: { ...globalContext.meta, ...meta }
             } );
 
         } catch ( err ) {
