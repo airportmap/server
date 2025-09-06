@@ -1,4 +1,4 @@
-import type { GlobalContext, RenderOptions } from '@airportmap/types';
+import type { GlobalContext, RenderContext, RenderOptions } from '@airportmap/types';
 import type Server from '@server/core/Server';
 import { type Request, type Response } from 'express';
 
@@ -41,12 +41,13 @@ export default class Renderer {
             const { template, assets, meta, data } = options;
 
             const globalContext = await this.globalContext( req );
+            const pageAssets = await this.server.assetLoader.assets( assets );
 
             res.status( 200 ).render( template, {
                 ...globalContext, ...data,
-                assets: this.server.assetLoader.assets( assets ),
+                assets: pageAssets,
                 meta: { ...globalContext.meta, ...meta }
-            } );
+            } as RenderContext );
 
         } catch ( err ) {
 

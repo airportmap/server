@@ -1,4 +1,4 @@
-import type { RenderOptions } from '@airportmap/types';
+import type { RenderOptions, Assets } from '@airportmap/types';
 import type Server from '@server/core/Server';
 
 export default class AssetLoader {
@@ -7,11 +7,9 @@ export default class AssetLoader {
         private server: Server
     ) {}
 
-    public async assets ( options: RenderOptions[ 'assets' ] ) : Promise< any > {
+    public async assets ( options: RenderOptions[ 'assets' ] ) : Promise< Assets > {
 
-        const assets = {};
-
-        return assets;
+        return {} as Assets;
 
     }
 

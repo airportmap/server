@@ -14,7 +14,7 @@ export default async function i18n ( server: Server ) : Promise< boolean > {
 
             const { configPath, lookupPath } = server.config.mods.i18n;
 
-            const config = await loadYamlConfig< I18nConfig >( join( server.path, configPath ), 'i18n' );
+            const config = await loadYamlConfig< I18nConfig >( join( server.path, configPath ) );
             const lookup = await loadJsonConfig< I18nLookup >( join( server.path, lookupPath ) );
 
             await i18next
@@ -23,12 +23,12 @@ export default async function i18n ( server: Server ) : Promise< boolean > {
                 .init( {
                     debug: server.debug.enabled,
                     cleanCode: true,
-                    fallbackLng: config.fallbackLng,
+                    fallbackLng: config.i18n.fallbackLng,
                     supportedLngs: lookup.supportedLngs,
-                    preload: config.preload,
+                    preload: config.i18n.preload,
                     ns: lookup.namespaces,
                     backend: {
-                        loadPath: join( config.path, config.pattern )
+                        loadPath: join( config.i18n.path, config.i18n.pattern )
                     },
                     detection: {
                         order: [ 'cookie', 'header' ],
