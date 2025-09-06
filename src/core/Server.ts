@@ -22,7 +22,7 @@ export default class Server {
     private helper: {
         assetLoader?: AssetLoader;
         renderer?: Renderer;
-    };
+    } = {};
 
     public get path () : string { return this.PATH }
     public get env () : string { return this.ENV }
