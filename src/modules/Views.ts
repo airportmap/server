@@ -1,4 +1,4 @@
-import { type Server } from '@server';
+import type Server from '@server/core/Server';
 
 export default async function views ( server: Server ) : Promise< boolean > {
 

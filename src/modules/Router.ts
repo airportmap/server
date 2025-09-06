@@ -1,6 +1,6 @@
 import type { RouteConfig } from '@airportmap/types';
-import { type Server } from '@server';
 import { loadYamlConfig } from '@server/core/ConfigLoader';
+import type Server from '@server/core/Server';
 import { type Application } from 'express';
 import { join } from 'node:path';
 

@@ -9,7 +9,7 @@ import express, { type Application } from 'express';
 import { type Server as HttpServer } from 'node:http';
 import { join } from 'node:path';
 
-export class Server {
+export default class Server {
 
     private serverCfg?: ServerConfig;
     private modules: Record< string, boolean > = {};
