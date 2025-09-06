@@ -3,7 +3,8 @@
     "baseUrl": ".",
     "paths": {
       "@server": [ "src/Server" ],
-      "@server/core/*": [ "src/core/*" ]
+      "@server/core/*": [ "src/core/*" ],
+      "@server/mods/*": [ "src/modules/*" ]
     }
   }
 }
