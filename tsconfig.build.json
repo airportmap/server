@@ -10,7 +10,7 @@
     "resolveJsonModule": true,
     "rootDir": "./src",
     "outDir": "./dist",
-    "declaration": false,
+    "declaration": true,
     "declarationMap": false,
     "sourceMap": true
   }
