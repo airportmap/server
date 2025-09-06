@@ -13,22 +13,14 @@ export default class AssetLoader {
 
     private globalAssets () : { css: string[], js: string[] } {
 
-        return [ 'css', 'js' ].reduce( ( assets, t ) => ( {
-            ...assets,
-            [t]: Object.entries( this.manifest!.assets[ t ] )
-                .filter( ( [ , v ] ) => ( v as any ).global )
-                .map( ( [ k ] ) => k )
-        } ), { css: [], js: [] } );
+        const assets: { css: string[], js: string[] } = { css: [], js: [] };
 
-    }
+        [ 'css', 'js' ].forEach( ( t ) => {
+            const a = this.manifest!.assets[ t as keyof AssetManifest[ 'assets' ] ] as any;
+            assets[ t as keyof typeof assets ] = Object.keys( a ).filter( ( k ) => a[ k ].global )
+        } );
 
-    private resolveAssets ( options?: RenderOptions[ 'assets' ] ) : NonNullable< RenderOptions[ 'assets' ] > {
-
-        return {
-            css: options?.css || [],
-            js: options?.js || [],
-            preload: options?.preload || []
-        };
+        return assets;
 
     }
 
@@ -84,7 +76,7 @@ export default class AssetLoader {
             join( this.server.path, 'conf/assetManifest.yml' )
         );
 
-        const { css, js, preload } = this.resolveAssets( options );
+        const { css = [], js = [], preload = [] } = options ?? {};
         const globalAssets = this.globalAssets();
 
         return {
