@@ -8,14 +8,23 @@ async function getFileContent ( path: string ) : Promise< string > {
 
 }
 
-export async function loadJsonConfig< T extends object > ( path: string ) : Promise< T > {
+async function extractConfig< T extends object > ( path: string, json: boolean, key?: string ) : Promise< T > {
 
-    return load( await getFileContent( path ), { json: true } ) as T;
+    const content = await getFileContent( path );
+    const cfg = load( content, { json } ) ?? {} as any;
+
+    return ( key ? key in cfg ? cfg[ key ] : {} : cfg ) as T;
 
 }
 
-export async function loadYamlConfig< T extends object > ( path: string ) : Promise< T > {
+export async function loadJsonConfig< T extends object > ( path: string, key?: string ) : Promise< T > {
 
-    return load( await getFileContent( path ) ) as T;
+    return await extractConfig< T >( path, true, key );
+
+}
+
+export async function loadYamlConfig< T extends object > ( path: string, key?: string ) : Promise< T > {
+
+    return await extractConfig< T >( path, false, key );
 
 }

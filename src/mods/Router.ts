@@ -6,11 +6,11 @@ import { join } from 'node:path';
 
 export default async function router ( server: Server ) : Promise< boolean > {
 
-    if ( server.config.router && server.config.router.enabled ) {
+    if ( server.config.mods.router && server.config.mods.router.enabled ) {
 
         try {
 
-            const { configPath, cntrlBase } = server.config.router;
+            const { configPath, cntrlBase } = server.config.mods.router;
 
             const routes = await loadYamlConfig< RouteConfig >( join( server.path, configPath ) );
 

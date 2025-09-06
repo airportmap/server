@@ -8,13 +8,13 @@ import { join } from 'node:path';
 
 export default async function i18n ( server: Server ) : Promise< boolean > {
 
-    if ( server.config.i18n && server.config.i18n.enabled ) {
+    if ( server.config.mods.i18n && server.config.mods.i18n.enabled ) {
 
         try {
 
-            const { configPath, lookupPath } = server.config.i18n;
+            const { configPath, lookupPath } = server.config.mods.i18n;
 
-            const config = await loadYamlConfig< I18nConfig >( join( server.path, configPath ) );
+            const config = await loadYamlConfig< I18nConfig >( join( server.path, configPath ), 'i18n' );
             const lookup = await loadJsonConfig< I18nLookup >( join( server.path, lookupPath ) );
 
             await i18next
@@ -23,12 +23,12 @@ export default async function i18n ( server: Server ) : Promise< boolean > {
                 .init( {
                     debug: server.debug.enabled,
                     cleanCode: true,
-                    fallbackLng: config.i18n.fallbackLng,
+                    fallbackLng: config.fallbackLng,
                     supportedLngs: lookup.supportedLngs,
-                    preload: config.i18n.preload,
+                    preload: config.preload,
                     ns: lookup.namespaces,
                     backend: {
-                        loadPath: join( config.i18n.path, config.i18n.pattern )
+                        loadPath: join( config.path, config.pattern )
                     },
                     detection: {
                         order: [ 'cookie', 'header' ],

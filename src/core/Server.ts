@@ -43,8 +43,8 @@ export default class Server {
     private async loadConfig () : Promise< ServerConfig > {
 
         return deepmerge(
-            await loadYamlConfig( join( this.path, `conf/server.yml` ) ),
-            await loadYamlConfig( join( this.path, `conf/server.${ this.env }.yml` ) )
+            await loadYamlConfig< ServerConfig >( join( this.path, `conf/server.yml` ), 'server' ),
+            await loadYamlConfig< Partial< ServerConfig > >( join( this.path, `conf/server.${ this.env }.yml` ), 'server' )
         ) as ServerConfig;
 
     }
