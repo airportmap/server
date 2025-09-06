@@ -1,5 +1,5 @@
 import Server from '@server/core/Server';
 import AssetLoader from '@server/helper/AssetLoader';
-import Render from '@server/helper/Render';
+import Renderer from '@server/helper/Renderer';
 
-export { Server, AssetLoader, Render };
+export { Server, AssetLoader, Renderer };
