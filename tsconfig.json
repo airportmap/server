@@ -4,7 +4,7 @@
     "paths": {
       "@server/core/*": [ "src/core/*" ],
       "@server/helper/*": [ "src/helper/*" ],
-      "@server/mods/*": [ "src/modules/*" ]
+      "@server/mods/*": [ "src/mods/*" ]
     }
   }
 }

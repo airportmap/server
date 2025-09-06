@@ -14,7 +14,7 @@ import { join } from 'node:path';
 export default class Server {
 
     private serverCfg?: ServerConfig;
-    private modules: Record< string, boolean > = {};
+    private mods: Record< string, boolean > = {};
     private debugCls?: Debug;
     private expressApp?: Application;
     private httpServer?: HttpServer;
@@ -27,7 +27,7 @@ export default class Server {
     public get path () : string { return this.PATH }
     public get env () : string { return this.ENV }
     public get config () : ServerConfig { return this.serverCfg! }
-    public get mods () : string[] { return Object.keys( this.modules ).filter( ( k ) => this.modules[ k ] ) }
+    public get enabledMods () : string[] { return Object.keys( this.mods ).filter( ( k ) => this.mods[ k ] ) }
     public get debug () : Debug { return this.debugCls! }
     public get app () : Application { return this.expressApp! }
     public get server () : HttpServer { return this.httpServer! }
@@ -49,11 +49,11 @@ export default class Server {
 
     }
 
-    private async loadModules () : Promise< void > {
+    private async loadMods () : Promise< void > {
 
-        this.modules.i18n = await i18n( this );
-        this.modules.views = await views( this );
-        this.modules.router = await router( this );
+        this.mods.i18n = await i18n( this );
+        this.mods.views = await views( this );
+        this.mods.router = await router( this );
 
     }
 
@@ -70,7 +70,7 @@ export default class Server {
         this.debugCls = new Debug ( this.config.debug );
         this.expressApp = express();
 
-        await this.loadModules();
+        await this.loadMods();
 
     }
 
@@ -83,7 +83,7 @@ export default class Server {
             this.debug.log( 'server', `Serving host: ${ this.config.host }` );
             this.debug.log( 'server', `HTTPS enabled: ${ this.config.https ? 'yes' : 'no' }` );
             this.debug.log( 'server', `Debugger enabled: ${ this.debug.enabled ? 'yes' : 'no' }` );
-            this.debug.log( 'server', `Loaded modules: ${ this.mods.join( ', ' ) }` );
+            this.debug.log( 'server', `Loaded modules: ${ this.enabledMods.join( ', ' ) }` );
         } );
 
         this.server.on( 'close', () => {
