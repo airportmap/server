@@ -8,13 +8,13 @@ async function getFileContent ( path: string ) : Promise< string > {
 
 }
 
-export async function loadJsonConfig<T extends object> ( path: string ) : Promise< T > {
+export async function loadJsonConfig< T extends object > ( path: string ) : Promise< T > {
 
     return load( await getFileContent( path ), { json: true } ) as T;
 
 }
 
-export async function loadYamlConfig<T extends object> ( path: string ) : Promise< T > {
+export async function loadYamlConfig< T extends object > ( path: string ) : Promise< T > {
 
     return load( await getFileContent( path ) ) as T;
 
