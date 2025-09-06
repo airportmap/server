@@ -2,6 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "@server": [ "src/Server" ],
       "@server/core/*": [ "src/core/*" ]
     }
   }

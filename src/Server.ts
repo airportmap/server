@@ -10,12 +10,15 @@ export class Server {
     private modules: Record< string, boolean >;
     private debug: Debug;
 
-    private app?: Application;
-    private server?: HttpServer;
+    private expressApp?: Application;
+    private httpServer?: HttpServer;
 
     public get config () : ServerConfig { return this.cfg }
     public get mods () : string[] { return Object.keys( this.modules ).filter( ( k ) => this.modules[ k ] ) }
     public get debugger () : Debug { return this.debug }
+
+    public get app () : Application { return this.expressApp }
+    public get server () : HttpServer { return this.httpServer }
 
     constructor ( cfg: ServerConfig ) {
 
@@ -26,22 +29,20 @@ export class Server {
 
     private async loadModules () : Promise< void > {
 
-        const { i18n } = this.cfg;
-
-        this.modules.i18n = await setupI18n( this.app, i18n );
+        this.modules.i18n = await setupI18n( this );
 
     }
 
     private listen () : void {
 
-        if ( this.app ) this.server = this.app.listen( this.cfg.port, this.cfg.host );
-        else this.debug.err( 'server', `Need to call server.init() first` );
+        if ( this.app ) this.httpServer = this.app.listen( this.cfg.port, this.cfg.host );
+        else this.debugger.err( 'server', `Need to call server.init() first` );
 
     }
 
     public async init () : Promise< void > {
 
-        this.app = express();
+        this.expressApp = express();
 
         await this.loadModules();
 
@@ -49,24 +50,22 @@ export class Server {
 
     public run () : void {
 
-        const { host, port, https, debug } = this.cfg;
-
         this.listen();
 
         this.server.on( 'connect', () => {
-            this.debug.log( 'server', `Airportmap server is running on port: ${ port }`, true );
-            this.debug.log( 'server', `Serving host: ${ host }` );
-            this.debug.log( 'server', `HTTPS enabled: ${ https ? 'yes' : 'no' }` );
-            this.debug.log( 'server', `Debugger enabled: ${ debug ? 'yes' : 'no' }` );
-            this.debug.log( 'server', `Loaded modules: ${ this.mods.join( ', ' ) }` );
+            this.debugger.log( 'server', `Airportmap server is running on port: ${ this.cfg.port }`, true );
+            this.debugger.log( 'server', `Serving host: ${ this.cfg.host }` );
+            this.debugger.log( 'server', `HTTPS enabled: ${ this.cfg.https ? 'yes' : 'no' }` );
+            this.debugger.log( 'server', `Debugger enabled: ${ this.debugger.enabled ? 'yes' : 'no' }` );
+            this.debugger.log( 'server', `Loaded modules: ${ this.mods.join( ', ' ) }` );
         } );
 
         this.server.on( 'close', () => {
-            this.debug.log( 'server', `Airportmap server shut down`, true );
+            this.debugger.log( 'server', `Airportmap server shut down`, true );
         } );
 
         this.server.on( 'error', ( err: Error ) => {
-            this.debug.err( 'server', `Server error occurred`, err );
+            this.debugger.err( 'server', `Server error occurred`, err );
             process.exit( 1 );
         } );
 
