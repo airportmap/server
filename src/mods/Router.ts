@@ -1,5 +1,5 @@
 import type { RouteConfig } from '@airportmap/types';
-import { loadYamlConfig } from '@server/core/ConfigLoader';
+import loadConfig from '@server/core/Config';
 import type Server from '@server/core/Server';
 import { type Application } from 'express';
 import { join } from 'node:path';
@@ -12,7 +12,7 @@ export default async function router ( server: Server ) : Promise< boolean > {
 
             const { configPath, cntrlBase } = server.config.mods.router;
 
-            const routes = await loadYamlConfig< RouteConfig >( join( server.path, configPath ) );
+            const routes = await loadConfig< RouteConfig >( join( server.path, configPath ) );
 
             for ( const { method, path, controller } of routes.routes ) {
 

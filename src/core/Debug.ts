@@ -1,4 +1,4 @@
-export class Debug {
+export default class Debug {
 
     constructor (
         private debug: boolean = false

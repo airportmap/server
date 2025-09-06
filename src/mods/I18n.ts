@@ -1,5 +1,5 @@
 import type { I18nConfig, I18nLookup } from '@airportmap/types';
-import { loadJsonConfig, loadYamlConfig } from '@server/core/ConfigLoader';
+import loadConfig from '@server/core/Config';
 import type Server from '@server/core/Server';
 import i18next from 'i18next';
 import FsBackend from 'i18next-fs-backend';
@@ -14,8 +14,8 @@ export default async function i18n ( server: Server ) : Promise< boolean > {
 
             const { configPath, lookupPath } = server.config.mods.i18n;
 
-            const config = await loadYamlConfig< I18nConfig >( join( server.path, configPath ) );
-            const lookup = await loadJsonConfig< I18nLookup >( join( server.path, lookupPath ) );
+            const config = await loadConfig< I18nConfig >( join( server.path, configPath ) );
+            const lookup = await loadConfig< I18nLookup >( join( server.path, lookupPath ) );
 
             await i18next
                 .use( FsBackend )

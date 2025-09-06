@@ -1,6 +1,6 @@
 import type { ServerConfig } from '@airportmap/types';
-import { loadYamlConfig } from '@server/core/ConfigLoader';
-import { Debug } from '@server/core/Debug';
+import loadConfig from '@server/core/Config';
+import Debug from '@server/core/Debug';
 import AssetLoader from '@server/helper/AssetLoader';
 import Renderer from '@server/helper/Renderer';
 import i18n from '@server/mods/I18n';
@@ -43,8 +43,8 @@ export default class Server {
     private async loadConfig () : Promise< ServerConfig > {
 
         return deepmerge(
-            await loadYamlConfig< Partial< ServerConfig > >( join( this.path, `conf/server.yml` ) ),
-            await loadYamlConfig< Partial< ServerConfig > >( join( this.path, `conf/server.${ this.env }.yml` ) )
+            await loadConfig< Partial< ServerConfig > >( join( this.path, `conf/server.yml` ) ),
+            await loadConfig< Partial< ServerConfig > >( join( this.path, `conf/server.${ this.env }.yml` ) )
         ) as ServerConfig;
 
     }
