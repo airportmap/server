@@ -8,7 +8,7 @@ import { join } from 'node:path';
 
 export default async function i18n ( server: Server ) : Promise< boolean > {
 
-    if ( server.config.mods.i18n && server.config.mods.i18n.enabled ) {
+    if ( server.config?.mods?.i18n && server.config.mods.i18n.enabled ) {
 
         try {
 
@@ -35,7 +35,7 @@ export default async function i18n ( server: Server ) : Promise< boolean > {
                         lookupCookie: 'locale',
                         caches: [ 'cookie' ],
                         cookieSameSite: 'strict',
-                        cookieSecure: server.config.https
+                        cookieSecure: server.config.server.https
                     }
                 } );
 

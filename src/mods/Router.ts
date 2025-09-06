@@ -6,7 +6,7 @@ import { join } from 'node:path';
 
 export default async function router ( server: Server ) : Promise< boolean > {
 
-    if ( server.config.mods.router && server.config.mods.router.enabled ) {
+    if ( server.config?.mods?.router && server.config.mods.router.enabled ) {
 
         try {
 
