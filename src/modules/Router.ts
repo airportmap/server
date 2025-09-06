@@ -4,7 +4,7 @@ import { loadYamlConfig } from '@server/core/ConfigLoader';
 import { type Application } from 'express';
 import { join } from 'node:path';
 
-export async function setupRouter ( server: Server ) : Promise< boolean > {
+export default async function router ( server: Server ) : Promise< boolean > {
 
     if ( server.config.router && server.config.router.enabled ) {
 

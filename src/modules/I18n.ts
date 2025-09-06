@@ -6,7 +6,7 @@ import FsBackend from 'i18next-fs-backend';
 import { LanguageDetector, handle } from 'i18next-http-middleware';
 import { join } from 'node:path';
 
-export async function setupI18n ( server: Server ) : Promise< boolean > {
+export default async function i18n ( server: Server ) : Promise< boolean > {
 
     if ( server.config.i18n && server.config.i18n.enabled ) {
 

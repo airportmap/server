@@ -1,6 +1,6 @@
 import { type Server } from '@server';
 
-export async function setupViews ( server: Server ) : Promise< boolean > {
+export default async function views ( server: Server ) : Promise< boolean > {
 
     if ( server.config.views && server.config.views.enabled ) {
 

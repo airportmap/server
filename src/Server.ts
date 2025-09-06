@@ -1,9 +1,9 @@
 import type { ServerConfig } from '@airportmap/types';
 import { loadYamlConfig } from '@server/core/ConfigLoader';
 import { Debug } from '@server/core/Debug';
-import { setupI18n } from '@server/mods/I18n';
-import { setupViews } from '@server/mods/Views';
-import { setupRouter } from '@server/mods/Router';
+import i18n from '@server/mods/I18n';
+import views from '@server/mods/Views';
+import router from '@server/mods/Router';
 import deepmerge from 'deepmerge';
 import express, { type Application } from 'express';
 import { type Server as HttpServer } from 'node:http';
@@ -41,9 +41,9 @@ export class Server {
 
     private async loadModules () : Promise< void > {
 
-        this.modules.i18n = await setupI18n( this );
-        this.modules.views = await setupViews( this );
-        this.modules.router = await setupRouter( this );
+        this.modules.i18n = await i18n( this );
+        this.modules.views = await views( this );
+        this.modules.router = await router( this );
 
     }
 
