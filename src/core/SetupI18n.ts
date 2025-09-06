@@ -14,14 +14,14 @@ export async function setupI18n ( server: Server ) : Promise< boolean > {
 
             const { configPath, lookupPath } = server.config.i18n;
 
-            const config = await loadYamlConfig< I18nConfig >( configPath );
-            const lookup = await loadJsonConfig< I18nLookup >( lookupPath );
+            const config = await loadYamlConfig< I18nConfig >( join( server.path, configPath ) );
+            const lookup = await loadJsonConfig< I18nLookup >( join( server.path, lookupPath ) );
 
             await i18next
                 .use( FsBackend )
                 .use( LanguageDetector )
                 .init( {
-                    debug: server.debugger.enabled,
+                    debug: server.debug.enabled,
                     cleanCode: true,
                     fallbackLng: config.fallbackLng,
                     supportedLngs: lookup.supportedLngs,
@@ -45,7 +45,7 @@ export async function setupI18n ( server: Server ) : Promise< boolean > {
 
         } catch ( err ) {
 
-            server.debugger.err( 'server:i18n', `Error while setting up i18n`, err );
+            server.debug.err( 'server:i18n', `Error while setting up i18n`, err );
             process.exit( 1 );
 
         }
