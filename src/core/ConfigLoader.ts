@@ -1,5 +1,5 @@
-import { readFile } from 'node:fs/promises';
 import { load } from 'js-yaml';
+import { readFile } from 'node:fs/promises';
 
 async function getFileContent ( path: string ) : Promise< string > {
 

@@ -1,10 +1,10 @@
 import type { I18nConfig, I18nLookup } from '@airportmap/types';
 import { type Server } from '@server';
 import { loadJsonConfig, loadYamlConfig } from '@server/core/ConfigLoader';
-import { join } from 'node:path';
 import i18next from 'i18next';
 import FsBackend from 'i18next-fs-backend';
 import { LanguageDetector, handle } from 'i18next-http-middleware';
+import { join } from 'node:path';
 
 export async function setupI18n ( server: Server ) : Promise< boolean > {
 

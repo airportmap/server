@@ -1,11 +1,11 @@
-import { Server as HttpServer } from 'node:http';
 import type { ServerConfig } from '@airportmap/types';
 import { loadYamlConfig } from '@server/core/ConfigLoader';
 import { Debug } from '@server/core/Debug';
 import { setupI18n } from '@server/core/SetupI18n';
-import { join } from 'node:path';
-import express, { type Application } from 'express';
 import deepmerge from 'deepmerge';
+import express, { type Application } from 'express';
+import { type Server as HttpServer } from 'node:http';
+import { join } from 'node:path';
 
 export class Server {
 
