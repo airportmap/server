@@ -1,7 +1,7 @@
 import type { ServerConfig } from '@airportmap/types';
 import { loadYamlConfig } from '@server/core/ConfigLoader';
 import { Debug } from '@server/core/Debug';
-import { setupI18n } from '@server/mods/SetupI18n';
+import { setupI18n } from '@server/mods/I18n';
 import deepmerge from 'deepmerge';
 import express, { type Application } from 'express';
 import { type Server as HttpServer } from 'node:http';
