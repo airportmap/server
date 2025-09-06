@@ -26,7 +26,7 @@ export class Debug {
 
     }
 
-    public err ( mod: string, msg: string, err?: Error ) : void {
+    public err ( mod: string, msg: string, err?: any ) : void {
 
         this.logMsg( 'error', mod, msg + ( err instanceof Error ) ? `: ${ err.message }` : ``, true );
 

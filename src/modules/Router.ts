@@ -25,7 +25,7 @@ export default async function router ( server: Server ) : Promise< boolean > {
                         ( server.app[ method as keyof Application ] as any )( path, fn );
 
                 } catch ( err ) { server.debug.warn(
-                    'server:router', `Failed to load controller for route ${ method }::${ path }`, err
+                    'server:router', `Failed to load controller for route ${ method }::${ path }: ${ err }`
                 ) }
 
             }

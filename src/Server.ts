@@ -11,19 +11,19 @@ import { join } from 'node:path';
 
 export class Server {
 
-    private serverCfg: ServerConfig;
-    private modules: Record< string, boolean >;
-    private debugCls: Debug;
-    private expressApp: Application;
-    private httpServer: HttpServer;
+    private serverCfg?: ServerConfig;
+    private modules: Record< string, boolean > = {};
+    private debugCls?: Debug;
+    private expressApp?: Application;
+    private httpServer?: HttpServer;
 
     public get path () : string { return this.PATH }
     public get env () : string { return this.ENV }
-    public get config () : ServerConfig { return this.serverCfg }
+    public get config () : ServerConfig { return this.serverCfg! }
     public get mods () : string[] { return Object.keys( this.modules ).filter( ( k ) => this.modules[ k ] ) }
-    public get debug () : Debug { return this.debugCls }
-    public get app () : Application { return this.expressApp }
-    public get server () : HttpServer { return this.httpServer }
+    public get debug () : Debug { return this.debugCls! }
+    public get app () : Application { return this.expressApp! }
+    public get server () : HttpServer { return this.httpServer! }
 
     constructor (
         private PATH: string,
