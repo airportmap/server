@@ -1,20 +1,21 @@
 import { Server as HttpServer } from 'node:http';
 import type { ServerConfig } from '@airportmap/types';
 import { Debug } from '@server/core/Debug';
+import { setupI18n } from '@server/core/SetupI18n';
 import express, { type Application } from 'express';
 
 export class Server {
 
     private cfg: ServerConfig;
+    private modules: Record< string, boolean >;
     private debug: Debug;
-    private modules: string[];
 
     private app?: Application;
     private server?: HttpServer;
 
     public get config () : ServerConfig { return this.cfg }
+    public get mods () : string[] { return Object.keys( this.modules ).filter( ( k ) => this.modules[ k ] ) }
     public get debugger () : Debug { return this.debug }
-    public get mods () : string[] { return this.modules }
 
     constructor ( cfg: ServerConfig ) {
 
@@ -23,7 +24,13 @@ export class Server {
 
     }
 
-    private async loadModules () : Promise< void > {}
+    private async loadModules () : Promise< void > {
+
+        const { i18n } = this.cfg;
+
+        this.modules.i18n = await setupI18n( this.app, i18n );
+
+    }
 
     private listen () : void {
 
@@ -51,7 +58,7 @@ export class Server {
             this.debug.log( 'server', `Serving host: ${ host }` );
             this.debug.log( 'server', `HTTPS enabled: ${ https ? 'yes' : 'no' }` );
             this.debug.log( 'server', `Debugger enabled: ${ debug ? 'yes' : 'no' }` );
-            this.debug.log( 'server', `Loaded modules: ${ this.modules.join( ', ' ) }` );
+            this.debug.log( 'server', `Loaded modules: ${ this.mods.join( ', ' ) }` );
         } );
 
         this.server.on( 'close', () => {
