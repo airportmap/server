@@ -23,12 +23,12 @@ export async function setupI18n ( server: Server ) : Promise< boolean > {
                 .init( {
                     debug: server.debug.enabled,
                     cleanCode: true,
-                    fallbackLng: config.fallbackLng,
+                    fallbackLng: config.i18n.fallbackLng,
                     supportedLngs: lookup.supportedLngs,
-                    preload: config.preload,
+                    preload: config.i18n.preload,
                     ns: lookup.namespaces,
                     backend: {
-                        loadPath: join( config.path, config.pattern )
+                        loadPath: join( config.i18n.path, config.i18n.pattern )
                     },
                     detection: {
                         order: [ 'cookie', 'header' ],
