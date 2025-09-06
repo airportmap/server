@@ -1,2 +1,3 @@
-# server
+# @airportmap/server
+
 Airportmap server module

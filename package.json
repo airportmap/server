@@ -1,0 +1,21 @@
+{
+  "name": "@airportmap/server",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": {
+    "name": "komed3 (Paul Köhler)",
+    "email": "webmaster@komed3.de",
+    "url": "https://komed3.de"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "i18next": "^25.5.2",
+    "i18next-fs-backend": "^2.6.0",
+    "i18next-http-middleware": "^3.8.0",
+    "js-yaml": "^4.1.0",
+    "pug": "^3.0.3"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3"
+  }
+}
