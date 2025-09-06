@@ -34,7 +34,47 @@ export default class AssetLoader {
 
     private resolveDeps < T > ( type: 'css' | 'js', assets: string[] ) : T {
 
-        return [] as T;
+        const resolved = new Set < string > ();
+        const visiting = new Set < string > ();
+        const manifest = this.manifest!.assets[ type ];
+
+        const visit = ( asset: string ) : void => {
+
+            if ( resolved.has( asset ) ) return;
+
+            if ( visiting.has( asset ) ) {
+                this.server.debug.warn( 'server:assetLoader',
+                    `Circular dependency detected for ${ type }: ${ asset }`
+                );
+                return;
+            }
+
+            if ( ! manifest[ asset ] ) {
+                this.server.debug.warn( 'server:assetLoader',
+                    `Asset not found in manifest: ${ type }/${ asset }`
+                );
+                return;
+            }
+
+            visiting.add( asset );
+            manifest[ asset ].dependencies?.forEach( visit );
+            visiting.delete( asset );
+            resolved.add( asset );
+
+        };
+
+        assets.forEach( visit );
+
+        return Array.from( resolved ).map( ( k ) => {
+
+            const asset = manifest[ k ];
+
+            delete asset.dependencies;
+            delete asset.global;
+
+            return asset;
+
+        } ) as T;
 
     }
 
