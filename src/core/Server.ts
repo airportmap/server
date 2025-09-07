@@ -40,9 +40,9 @@ export default class Server {
         private ENV: string = process.env.NODE_ENV || 'production'
     ) {}
 
-    private async loadConfig () : Promise< ServerConfig > {
+    private async loadConfig () : Promise< void > {
 
-        return deepmerge(
+        this.serverConfig = deepmerge(
             await loadConfig< Partial< ServerConfig > >( join( this.path, `conf/server.yml` ) ),
             await loadConfig< Partial< ServerConfig > >( join( this.path, `conf/server.${ this.env }.yml` ) )
         ) as ServerConfig;
@@ -68,7 +68,8 @@ export default class Server {
 
     public async init () : Promise< void > {
 
-        this.serverConfig = await this.loadConfig();
+        await this.loadConfig();
+
         this.debugger = new Debug ( this.config.server.debug );
         this.expressApp = express();
 
