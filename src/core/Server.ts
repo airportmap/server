@@ -59,7 +59,7 @@ export default class Server {
 
     private listen () : void {
 
-        const { port = 3000, host } = this.config.server;
+        const { port, host } = this.config.server;
 
         if ( this.app ) this.httpServer = this.app.listen( port, host );
         else this.debug.err( 'server', `Need to call server.init() first` );
@@ -69,7 +69,7 @@ export default class Server {
     public async init () : Promise< void > {
 
         this.serverConfig = await this.loadConfig();
-        this.debugger = new Debug ( this.config.server.debug ?? false );
+        this.debugger = new Debug ( this.config.server.debug );
         this.expressApp = express();
 
         await this.loadMods();
@@ -81,7 +81,7 @@ export default class Server {
         this.listen();
 
         this.server.on( 'connect', () => {
-            const { port = 3000, host, https = false } = this.config.server;
+            const { port, host, https } = this.config.server;
             this.debug.log( 'server', `Airportmap server is running on port: ${ port }`, true );
             this.debug.log( 'server', `Serving host: ${ host }` );
             this.debug.log( 'server', `HTTPS enabled: ${ https ? 'yes' : 'no' }` );
