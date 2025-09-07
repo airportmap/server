@@ -84,7 +84,7 @@ export default class Server {
 
     }
 
-    public async init () : Promise< void > {
+    public async init () : Promise< this > {
 
         await this.loadConfig();
 
@@ -93,6 +93,8 @@ export default class Server {
 
         await this.serveStatics();
         await this.loadMods();
+
+        return this;
 
     }
 
