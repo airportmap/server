@@ -59,10 +59,17 @@ export default class Server {
 
     private listen () : void {
 
-        const { port, host } = this.config.server;
+        const { port, host, https } = this.config.server;
 
-        if ( this.app ) this.httpServer = this.app.listen( port, host );
-        else this.debug.err( 'server', `Need to call server.init() first` );
+        if ( ! this.app ) this.debug.exit( 'server', `Need to call server.init() first` );
+
+        this.httpServer = this.app.listen( port, host, () => {
+            this.debug.log( 'server', `Airportmap server is running on port: ${ port }`, true );
+            this.debug.log( 'server', `Serving host: ${ host }` );
+            this.debug.log( 'server', `HTTPS enabled: ${ https ? 'yes' : 'no' }` );
+            this.debug.log( 'server', `Debugger enabled: ${ this.debug.enabled ? 'yes' : 'no' }` );
+            this.debug.log( 'server', `Loaded modules: ${ this.enabledMods.join( ', ' ) }` );
+        } );
 
     }
 
@@ -82,12 +89,7 @@ export default class Server {
         this.listen();
 
         this.server.on( 'connect', () => {
-            const { port, host, https } = this.config.server;
-            this.debug.log( 'server', `Airportmap server is running on port: ${ port }`, true );
-            this.debug.log( 'server', `Serving host: ${ host }` );
-            this.debug.log( 'server', `HTTPS enabled: ${ https ? 'yes' : 'no' }` );
-            this.debug.log( 'server', `Debugger enabled: ${ this.debug.enabled ? 'yes' : 'no' }` );
-            this.debug.log( 'server', `Loaded modules: ${ this.enabledMods.join( ', ' ) }` );
+            this.debug.log( 'server', `New connection established` );
         } );
 
         this.server.on( 'close', () => {
@@ -95,8 +97,7 @@ export default class Server {
         } );
 
         this.server.on( 'error', ( err: Error ) => {
-            this.debug.err( 'server', `Server error occurred`, err );
-            process.exit( 1 );
+            this.debug.exit( 'server', `Server error occurred`, err );
         } );
 
     }

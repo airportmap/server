@@ -34,8 +34,7 @@ export default async function router ( server: Server ) : Promise< boolean > {
 
         } catch ( err ) {
 
-            server.debug.err( 'server:router', `Error while setting up router`, err );
-            process.exit( 1 );
+            server.debug.exit( 'server:router', `Error while setting up router`, err );
 
         }
 
