@@ -7,7 +7,7 @@ export default class Debug {
     private logMsg ( type: 'log' | 'warn' | 'error', module: string, msg: string, critical?: boolean ) : void {
 
         if ( critical || type === 'error' || this.debug ) console[ type ](
-            `${ new Date().toISOString() } [${ module.toLowerCase() }] ${ type.toUpperCase() }: ${ msg }`
+            `${ new Date().toISOString() } [${ type.toUpperCase() }] < ${ module } > ${ msg }`
         );
 
     }
