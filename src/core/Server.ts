@@ -7,7 +7,7 @@ import i18n from '@server/mods/I18n';
 import views from '@server/mods/Views';
 import router from '@server/mods/Router';
 import deepmerge from 'deepmerge';
-import express, { type Application } from 'express';
+import express, { type Application, static as serveStatic } from 'express';
 import { type Server as HttpServer } from 'node:http';
 import { join } from 'node:path';
 
@@ -49,6 +49,17 @@ export default class Server {
 
     }
 
+    private async serveStatics () : Promise< void > {
+
+        for ( const [ key, path ] of Object.entries( this.config.statics ?? {} ) ) {
+
+            try { this.app.use( `/${ key }`, serveStatic( join( this.path, path ) ) ) }
+            catch ( err ) { this.debug.exit( 'server', `Cannot serve statics from ${ key }`, err ) }
+
+        }
+
+    }
+
     private async loadMods () : Promise< void > {
 
         this.mods.i18n = await i18n( this );
@@ -80,6 +91,7 @@ export default class Server {
         this.debugger = new Debug ( this.config.server.debug );
         this.expressApp = express();
 
+        await this.serveStatics();
         await this.loadMods();
 
     }
