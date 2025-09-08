@@ -24,11 +24,17 @@ export default async function router ( server: Server ) : Promise< boolean > {
                         req: Request, res: Response, next: NextFunction
                     ) => fn( req, res, server, next ) );
 
-                } catch ( err ) { server.debug.warn(
-                    'server:router', `Failed to load controller for route ${ method }::${ path }: ${ (
-                        ( err as unknown as Error ).message
-                    ) }`
-                ) }
+                } catch ( err ) {
+
+                    server.debug.warn( 'server:router', `Failed to load controller for route ${ method }::${ path }: ${ (
+                            ( err as unknown as Error ).message
+                    ) }` );
+
+                    ( server.app[ method as keyof Application ] )( path, ( _: Request, res: Response ) => {
+                        res.status( 503 ).send( 'Service temporarily unavailable' );
+                    } );
+
+                }
 
             }
 
