@@ -6,6 +6,7 @@ import Renderer from '@server/helper/Renderer';
 import i18n from '@server/mods/I18n';
 import views from '@server/mods/Views';
 import router from '@server/mods/Router';
+import cookieParser from 'cookie-parser';
 import deepmerge from 'deepmerge';
 import express, { static as serveStatic, type Application } from 'express';
 import type { Server as HttpServer } from 'node:http';
@@ -105,6 +106,8 @@ export default class Server {
 
         this.debugger = new Debug ( this.config.server.debug );
         this.expressApp = express();
+
+        this.app.use( cookieParser() );
 
         await this.serveStatics();
         await this.loadMods();
