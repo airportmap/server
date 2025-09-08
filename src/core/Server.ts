@@ -7,8 +7,8 @@ import i18n from '@server/mods/I18n';
 import views from '@server/mods/Views';
 import router from '@server/mods/Router';
 import deepmerge from 'deepmerge';
-import express, { type Application, static as serveStatic } from 'express';
-import { type Server as HttpServer } from 'node:http';
+import express, { static as serveStatic, type Application } from 'express';
+import type { Server as HttpServer } from 'node:http';
 import { join } from 'node:path';
 
 export default class Server {

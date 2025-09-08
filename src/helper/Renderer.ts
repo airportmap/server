@@ -1,6 +1,6 @@
 import type { GlobalContext, RenderContext, RenderOptions } from '@airportmap/types';
 import type Server from '@server/core/Server';
-import { type Request, type Response } from 'express';
+import type { Request, Response } from 'express';
 
 export default class Renderer {
 

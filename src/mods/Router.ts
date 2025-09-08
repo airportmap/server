@@ -1,7 +1,7 @@
 import type { RouteConfig } from '@airportmap/types';
 import loadConfig from '@server/core/Config';
 import type Server from '@server/core/Server';
-import { type Application } from 'express';
+import type { Application, NextFunction, Request, Response } from 'express';
 import { join } from 'node:path';
 
 export default async function router ( server: Server ) : Promise< boolean > {
@@ -11,7 +11,6 @@ export default async function router ( server: Server ) : Promise< boolean > {
         try {
 
             const { configPath, cntrlBase } = server.config.mods.router;
-
             const routes = await loadConfig< RouteConfig >( join( server.path, configPath ) );
 
             for ( const { method, path, controller } of routes.routes ) {
@@ -21,11 +20,14 @@ export default async function router ( server: Server ) : Promise< boolean > {
                     const cntlr = await import( join( cntrlBase, controller ) );
                     const fn = cntlr[ method ] || cntlr.default || cntlr;
 
-                    if ( typeof server.app[ method as keyof Application ] === 'function' && typeof fn === 'function' )
-                        ( server.app[ method as keyof Application ] as any )( path, fn );
+                    ( server.app[ method as keyof Application ] as any )( path, (
+                        req: Request, res: Response, next: NextFunction
+                    ) => fn( req, res, server, next ) );
 
                 } catch ( err ) { server.debug.warn(
-                    'server:router', `Failed to load controller for route ${ method }::${ path }: ${ err }`
+                    'server:router', `Failed to load controller for route ${ method }::${ path }: ${ (
+                        ( err as unknown as Error ).message
+                    ) }`
                 ) }
 
             }
