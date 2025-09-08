@@ -23,6 +23,7 @@ export default async function i18n ( server: Server ) : Promise< i18n | false > 
                 .init( {
                     debug: server.debug.enabled,
                     cleanCode: true,
+                    keySeparator: false,
                     fallbackLng: config.i18n.fallbackLng,
                     supportedLngs: lookup.supportedLngs,
                     preload: config.i18n.preload,
