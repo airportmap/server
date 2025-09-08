@@ -10,7 +10,7 @@ export default async function router ( server: Server ) : Promise< boolean > {
 
         try {
 
-            const { configPath, cntrlBase } = server.config.mods.router;
+            const { configPath, cntrlBase } = server.config.mods!.router!;
             const routes = await loadConfig< RouteConfig >( join( server.path, configPath ) );
 
             for ( const { method, path, controller } of routes.routes ) {

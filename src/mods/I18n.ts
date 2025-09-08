@@ -12,7 +12,7 @@ export default async function i18n ( server: Server ) : Promise< i18n | false > 
 
         try {
 
-            const { configPath, lookupPath } = server.config.mods.i18n;
+            const { configPath, lookupPath } = server.config.mods!.i18n!;
 
             const config = await loadConfig< I18nConfig >( join( server.path, configPath ) );
             const lookup = await loadConfig< I18nLookup >( join( server.path, lookupPath ) );

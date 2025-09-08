@@ -92,8 +92,8 @@ export default class Server {
     public isModEnabled ( mod: string, safe: boolean = false ) : boolean {
 
         return !! this.mod[ mod ] || ( ! safe &&
-            !! this.config?.mods?.[ mod ] &&
-            !! this.config.mods[ mod ].enabled
+            !! this.config?.mods?.[ mod as keyof typeof this.config.mods ] &&
+            !! this.config?.mods?.[ mod as keyof typeof this.config.mods ]?.enabled
         );
 
     }
