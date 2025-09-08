@@ -20,7 +20,7 @@ export default async function router ( server: Server ) : Promise< boolean > {
                     const cntlr = await import( join( server.path, cntrlBase, controller ) );
                     const fn = cntlr[ method ] || cntlr.default || cntlr;
 
-                    ( server.app[ method as keyof Application ] as any )( path, (
+                    ( server.app[ method as keyof Application ] )( path, (
                         req: Request, res: Response, next: NextFunction
                     ) => fn( req, res, server, next ) );
 
