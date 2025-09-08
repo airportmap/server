@@ -14,30 +14,31 @@ import { join } from 'node:path';
 export default class Server {
 
     private serverConfig?: ServerConfig;
-    private mods: Record< string, any > = {};
+
     private debugger?: Debug;
     private expressApp?: Application;
     private httpServer?: HttpServer;
 
+    private mods: Record< string, any > = {};
+    private functions: Record< string, any > = {};
     private helper: {
         assetLoader?: AssetLoader;
         renderer?: Renderer;
     } = {};
 
-    private functions: Record< string, any > = {};
-
     public get path () : string { return this.PATH }
     public get env () : string { return this.ENV }
     public get config () : ServerConfig { return this.serverConfig! }
-    public get enabledMods () : string[] { return Object.keys( this.mods ).filter( ( k ) => this.mods[ k ] ) }
+
     public get debug () : Debug { return this.debugger! }
     public get app () : Application { return this.expressApp! }
     public get server () : HttpServer { return this.httpServer! }
 
+    public get enabledMods () : string[] { return Object.keys( this.mods ).filter( ( k ) => this.mods[ k ] ) }
+    public get mod () : Record< string, any > { return this.mods }
+    public get fn () : Record< string, any > { return this.functions }
     public get assetLoader () : AssetLoader { return this.helper.assetLoader ??= new AssetLoader ( this ) }
     public get renderer () : Renderer { return this.helper.renderer ??= new Renderer ( this ) }
-
-    public get fn () : Record< string, any > { return this.functions }
 
     constructor (
         private PATH: string,
@@ -85,6 +86,15 @@ export default class Server {
             this.debug.log( 'server', `Debugger enabled: ${ this.debug.enabled ? 'yes' : 'no' }` );
             this.debug.log( 'server', `Loaded modules: ${ this.enabledMods.join( ', ' ) }` );
         } );
+
+    }
+
+    public isModEnabled ( mod: string, safe: boolean = false ) : boolean {
+
+        return !! this.mod[ mod ] || ( ! safe &&
+            !! this.config?.mods?.[ mod ] &&
+            !! this.config.mods[ mod ].enabled
+        );
 
     }
 

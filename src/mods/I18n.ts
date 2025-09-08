@@ -1,14 +1,14 @@
 import type { I18nConfig, I18nLookup } from '@airportmap/types';
 import loadConfig from '@server/core/Config';
 import type Server from '@server/core/Server';
-import i18next from 'i18next';
+import i18next, { type i18n } from 'i18next';
 import FsBackend from 'i18next-fs-backend';
 import { LanguageDetector, handle } from 'i18next-http-middleware';
 import { join } from 'node:path';
 
-export default async function i18n ( server: Server ) : Promise< boolean > {
+export default async function i18n ( server: Server ) : Promise< i18n | false > {
 
-    if ( server.config?.mods?.i18n && server.config.mods.i18n.enabled ) {
+    if ( server.isModEnabled( 'i18n' ) ) {
 
         try {
 
@@ -40,9 +40,8 @@ export default async function i18n ( server: Server ) : Promise< boolean > {
                 } );
 
             server.app.use( handle( i18next ) );
-            server.bindFn< typeof i18next.getFixedT >( 'getFixedT', i18next.getFixedT );
 
-            return true;
+            return i18next;
 
         } catch ( err ) {
 
