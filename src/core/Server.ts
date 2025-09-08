@@ -24,6 +24,8 @@ export default class Server {
         renderer?: Renderer;
     } = {};
 
+    private functions: Record< string, any > = {};
+
     public get path () : string { return this.PATH }
     public get env () : string { return this.ENV }
     public get config () : ServerConfig { return this.serverConfig! }
@@ -34,6 +36,8 @@ export default class Server {
 
     public get assetLoader () : AssetLoader { return this.helper.assetLoader ??= new AssetLoader ( this ) }
     public get renderer () : Renderer { return this.helper.renderer ??= new Renderer ( this ) }
+
+    public get fn () : Record< string, any > { return this.functions }
 
     constructor (
         private PATH: string,
@@ -95,6 +99,16 @@ export default class Server {
         await this.loadMods();
 
         return this;
+
+    }
+
+    public bindFn< T > ( key: string, fn: T ) : void {
+
+        if ( key in this.functions || typeof fn !== 'function' ) {
+            this.debug.exit( 'server', `Cannot bind function ${ key }` );
+        }
+
+        this.functions[ key ] = fn;
 
     }
 
