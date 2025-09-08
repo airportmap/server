@@ -43,11 +43,7 @@ export default async function i18n ( server: Server ) : Promise< i18n | false > 
 
             return i18next;
 
-        } catch ( err ) {
-
-            server.debug.exit( 'server:i18n', `Error while setting up i18n`, err );
-
-        }
+        } catch ( err ) { server.debug.exit( 'server:i18n', `Error while setting up i18n`, err ) }
 
     }
 
