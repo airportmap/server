@@ -28,6 +28,7 @@ export default class Server {
 
     public get path () : string { return this.PATH }
     public get env () : string { return this.ENV }
+    public get isProd () : boolean { return this.ENV === 'production' }
     public get config () : ServerConfig { return this.serverConfig! }
 
     public get debug () : Debug { return this.debugger! }
