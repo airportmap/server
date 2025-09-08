@@ -8,12 +8,15 @@ export default class Renderer {
         private server: Server
     ) {}
 
-    private async globalContext ( req: Request ) : Promise< GlobalContext > {
+    private globalContext ( req: Request ) : GlobalContext {
+
+        const fn: GlobalContext[ 'fn' ] = {};
+
+        if ( this.server.isModEnabled( 'i18n', true ) )
+            fn.i18n = req.t.bind( req );
 
         return {
-            fn: {
-                i18n: req.t.bind( req )
-            },
+            fn,
             app: {
                 env: this.server.env,
                 host: req.get( 'host' ) || '',
@@ -34,17 +37,41 @@ export default class Renderer {
 
     }
 
+    private htmlClasses ( req: Request, extraClasses?: string ) : string {
+
+        const classes = new Set< string > ();
+
+        const theme = req.cookies?.theme || req.query.theme;
+        if ( theme ) classes.add( `_theme_${ theme }` );
+
+        const locale = req.cookies?.locale || req.acceptsLanguages?.()[ 0 ] || req.language;
+        if ( locale ) classes.add( `_locale_${ locale }` );
+
+        const ua = req.headers[ 'user-agent' ] || '';
+        classes.add( /mobile/i.test( ua ) ? `_mobile` : `_web` );
+
+        if ( extraClasses ) extraClasses.split( /\s+/ ).filter( Boolean ).forEach(
+            c => classes.add( c )
+        );
+
+        return Array.from( classes ).join( ' ' );
+
+    }
+
     public async render ( req: Request, res: Response, options: RenderOptions ) : Promise< void > {
 
         try {
 
-            const { template, bodyClass, assets = {}, meta = {}, data } = options;
+            const { template, htmlClasses, bodyClasses, assets = {}, meta = {}, data } = options;
 
-            const globalContext = await this.globalContext( req );
+            const globalContext = this.globalContext( req );
+            const classes = this.htmlClasses( req, htmlClasses );
             const pageAssets = await this.server.assetLoader.assets( assets );
 
             res.status( 200 ).render( template, {
-                ...globalContext, ...data, bodyClass, assets: pageAssets,
+                ...globalContext, ...data,
+                htmlClasses: classes, bodyClasses,
+                assets: pageAssets,
                 meta: { ...globalContext.meta, ...meta }
             } as RenderContext );
 
