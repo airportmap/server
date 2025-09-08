@@ -16,7 +16,7 @@ export default class AssetLoader {
         const assets: { css: string[], js: string[] } = { css: [], js: [] };
 
         [ 'css', 'js' ].forEach( ( t ) => {
-            const a = this.manifest!.assets[ t as keyof AssetManifest[ 'assets' ] ] as any;
+            const a = ( this.manifest!.assets[ t as keyof AssetManifest[ 'assets' ] ] ?? {} ) as any;
             assets[ t as keyof typeof assets ] = Object.keys( a ).filter( ( k ) => a[ k ].global )
         } );
 
@@ -26,9 +26,8 @@ export default class AssetLoader {
 
     private resolveDeps < T > ( type: 'css' | 'js', assets: string[] ) : T {
 
-        const resolved = new Set < string > ();
-        const visiting = new Set < string > ();
-        const manifest = this.manifest!.assets[ type ];
+        const resolved = new Set < string > (), visiting = new Set < string > ();
+        const manifest = ( this.manifest!.assets[ type ] ?? {} ) as any;
 
         const visit = ( asset: string ) : void => {
 

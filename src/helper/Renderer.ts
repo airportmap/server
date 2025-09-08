@@ -38,14 +38,13 @@ export default class Renderer {
 
         try {
 
-            const { template, assets, meta, data } = options;
+            const { template, bodyClass, assets = {}, meta = {}, data } = options;
 
             const globalContext = await this.globalContext( req );
             const pageAssets = await this.server.assetLoader.assets( assets );
 
             res.status( 200 ).render( template, {
-                ...globalContext, ...data,
-                assets: pageAssets,
+                ...globalContext, ...data, bodyClass, assets: pageAssets,
                 meta: { ...globalContext.meta, ...meta }
             } as RenderContext );
 
