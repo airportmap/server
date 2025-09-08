@@ -40,7 +40,7 @@ export default async function i18n ( server: Server ) : Promise< boolean > {
                 } );
 
             server.app.use( handle( i18next ) );
-            server.bindFn< typeof i18next.getFixedT >( 't', i18next.getFixedT );
+            server.bindFn< typeof i18next.getFixedT >( 'getFixedT', i18next.getFixedT );
 
             return true;
 
