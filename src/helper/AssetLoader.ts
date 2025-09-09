@@ -58,7 +58,7 @@ export default class AssetLoader {
 
         return Array.from( resolved ).map( ( k ) => {
 
-            const asset = manifest[ k ];
+            const asset = structuredClone( manifest[ k ] );
 
             delete asset.dependencies;
             delete asset.global;
