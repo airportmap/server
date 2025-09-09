@@ -1,7 +1,6 @@
 {
   "name": "@airportmap/server",
   "private": true,
-  "version": "0.1.0",
   "license": "MIT",
   "author": {
     "name": "komed3 (Paul Köhler)",
