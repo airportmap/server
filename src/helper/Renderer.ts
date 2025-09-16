@@ -1,4 +1,4 @@
-import type { GlobalContext, RenderContext, RenderOptions } from '@airportmap/types';
+import type { CookieContext, GlobalContext, RenderContext, RenderOptions } from '@airportmap/types';
 import type Server from '@server/core/Server';
 import type { Request, Response } from 'express';
 
@@ -8,7 +8,16 @@ export default class Renderer {
         private server: Server
     ) {}
 
-    private globalContext ( req: Request ) : GlobalContext {
+    private cookieContext ( req: Request ) : CookieContext {
+
+        return {
+            theme: req.cookies?.theme || req.query.theme,
+            locale: req.cookies?.locale || req.acceptsLanguages?.()[ 0 ] || req.language
+        };
+
+    }
+
+    private globalContext ( req: Request, cookies: CookieContext ) : GlobalContext {
 
         const fn: GlobalContext[ 'fn' ] = {};
 
@@ -21,7 +30,8 @@ export default class Renderer {
                 env: this.server.env,
                 host: req.get( 'host' ) || '',
                 protocol: req.protocol,
-                lang: req.language
+                supportedLngs: {},
+                ...cookies
             },
             site: {
                 originalUrl: req.originalUrl,
@@ -37,14 +47,12 @@ export default class Renderer {
 
     }
 
-    private htmlClasses ( req: Request, extraClasses?: string ) : string {
+    private htmlClasses ( req: Request, cookies: CookieContext, extraClasses?: string ) : string {
 
+        const { theme, locale } = cookies;
         const classes = new Set< string > ();
 
-        const theme = req.cookies?.theme || req.query.theme;
         if ( theme ) classes.add( `_theme_${ theme }` );
-
-        const locale = req.cookies?.locale || req.acceptsLanguages?.()[ 0 ] || req.language;
         if ( locale ) classes.add( `_locale_${ locale }` );
 
         const ua = req.headers[ 'user-agent' ] || '';
@@ -64,8 +72,9 @@ export default class Renderer {
 
             const { template, htmlClasses, bodyClasses, assets = {}, meta = {}, data } = options;
 
-            const globalContext = this.globalContext( req );
-            const classes = this.htmlClasses( req, htmlClasses );
+            const cookieContext = this.cookieContext( req );
+            const globalContext = this.globalContext( req, cookieContext );
+            const classes = this.htmlClasses( req, cookieContext, htmlClasses );
             const pageAssets = await this.server.assetLoader.assets( assets );
 
             res.status( 200 ).render( template, {
