@@ -21,6 +21,14 @@ export default class Renderer {
 
     }
 
+    private supportedLngs ( req: Request ) : GlobalContext[ 'app' ][ 'supportedLngs' ] {
+
+        return Array.from( req?.i18n?.options?.supportedLngs || [] )
+            .filter( l => l && l !== 'cimode' )
+            .map( code => ( { code, label: req.t( '_lang:' + code ) } ) );
+
+    }
+
     private globalContext ( req: Request, cookies: CookieContext ) : GlobalContext {
 
         const fn: GlobalContext[ 'fn' ] = {};
@@ -34,7 +42,7 @@ export default class Renderer {
                 env: this.server.env,
                 host: req.get( 'host' ) || '',
                 protocol: req.protocol,
-                supportedLngs: req.i18n.options.supportedLngs || [],
+                supportedLngs: this.supportedLngs( req ),
                 ...cookies
             },
             site: {
