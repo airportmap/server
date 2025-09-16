@@ -34,7 +34,7 @@ export default class Renderer {
                 env: this.server.env,
                 host: req.get( 'host' ) || '',
                 protocol: req.protocol,
-                supportedLngs: req.languages || [],
+                supportedLngs: req.i18n.options.supportedLngs || [],
                 ...cookies
             },
             site: {
