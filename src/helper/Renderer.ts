@@ -10,10 +10,14 @@ export default class Renderer {
 
     private cookieContext ( req: Request ) : CookieContext {
 
-        return {
-            theme: req.cookies?.theme || req.query.theme,
-            locale: req.cookies?.locale || req.acceptsLanguages?.()[ 0 ] || req.language
-        };
+        const cookies: CookieContext = {};
+
+        cookies.theme = req.cookies?.theme || req.query.theme;
+
+        if ( this.server.isModEnabled( 'i18n', true ) )
+            cookies.locale = req.cookies?.locale || req.acceptsLanguages?.()[ 0 ] || req.language
+
+        return cookies;
 
     }
 
@@ -30,7 +34,7 @@ export default class Renderer {
                 env: this.server.env,
                 host: req.get( 'host' ) || '',
                 protocol: req.protocol,
-                supportedLngs: {},
+                supportedLngs: req.languages || [],
                 ...cookies
             },
             site: {
