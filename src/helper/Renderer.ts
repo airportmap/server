@@ -12,8 +12,9 @@ export default class Renderer {
 
         const cookies: CookieContext = {};
         const cookieOpts: CookieOptions = {
-            path: '/', sameSite: 'strict',
-            secure: this.server.config.server.https
+            path: '/', httpOnly: true, sameSite: 'strict',
+            secure: this.server.config.server.https,
+            expires: new Date( Date.now() + 1.2e9 )
         };
 
         for ( const [ key, val ] of Object.entries( this.server.config.cookies ?? {} ) ) {
