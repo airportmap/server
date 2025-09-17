@@ -12,7 +12,7 @@ export default class Renderer {
 
         const cookies: CookieContext = {};
         const cookieOpts: CookieOptions = {
-            path: '/', httpOnly: true, sameSite: 'strict',
+            path: '/', sameSite: 'strict',
             secure: this.server.config.server.https,
             expires: new Date( Date.now() + 1.2e9 )
         };
