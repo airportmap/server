@@ -1,6 +1,6 @@
 import type { CookieContext, GlobalContext, RenderContext, RenderOptions } from '@airportmap/types';
 import type Server from '@server/core/Server';
-import type { Request, Response } from 'express';
+import type { CookieOptions, Request, Response } from 'express';
 
 export default class Renderer {
 
@@ -8,14 +8,35 @@ export default class Renderer {
         private server: Server
     ) {}
 
-    private cookieContext ( req: Request ) : CookieContext {
+    private cookieContext ( req: Request, res: Response ) : CookieContext {
 
         const cookies: CookieContext = {};
+        const cookieOpts: CookieOptions = {
+            path: '/', sameSite: 'strict',
+            secure: this.server.config.server.https
+        };
 
-        cookies.theme = req.cookies?.theme || req.query.theme;
+        for ( const [ key, val ] of Object.entries( this.server.config.cookies ?? {} ) ) {
 
-        if ( this.server.isModEnabled( 'i18n', true ) )
-            cookies.locale = req.cookies?.locale || req.acceptsLanguages?.()[ 0 ] || req.language
+            switch ( key ) {
+
+                default:
+                    cookies[ key ] = req.cookies?.[ key ] || val;
+                    break;
+
+                case 'locale':
+                    if ( this.server.isModEnabled( 'i18n', true ) )
+                        cookies.locale =
+                            req.cookies?.locale ||
+                            req.acceptsLanguages?.()[ 0 ] ||
+                            req.language || val;
+                    break;
+
+            }
+
+            res.cookie( key, cookies[ key ], cookieOpts );
+
+        }
 
         return cookies;
 
@@ -37,13 +58,12 @@ export default class Renderer {
             fn.i18n = req.t.bind( req );
 
         return {
-            fn,
+            fn, cookies,
             app: {
                 env: this.server.env,
                 host: req.get( 'host' ) || '',
                 protocol: req.protocol,
-                supportedLngs: this.supportedLngs( req ),
-                ...cookies
+                supportedLngs: this.supportedLngs( req )
             },
             site: {
                 originalUrl: req.originalUrl,
@@ -84,7 +104,7 @@ export default class Renderer {
 
             const { template, htmlClasses, bodyClasses, assets = {}, meta = {}, data } = options;
 
-            const cookieContext = this.cookieContext( req );
+            const cookieContext = this.cookieContext( req, res );
             const globalContext = this.globalContext( req, cookieContext );
             const classes = this.htmlClasses( req, cookieContext, htmlClasses );
             const pageAssets = await this.server.assetLoader.assets( assets );
