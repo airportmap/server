@@ -85,11 +85,11 @@ export default class Renderer {
         const { theme, locale } = cookies;
         const classes = new Set< string > ();
 
-        if ( theme ) classes.add( `_theme_${ theme }` );
-        if ( locale ) classes.add( `_locale_${ locale }` );
+        if ( theme ) classes.add( `___theme_${ theme }` );
+        if ( locale ) classes.add( `___locale_${ locale }` );
 
         const ua = req.headers[ 'user-agent' ] || '';
-        classes.add( /mobile/i.test( ua ) ? `_mobile` : `_web` );
+        classes.add( /mobile/i.test( ua ) ? `___mobile` : `___web` );
 
         if ( extraClasses ) extraClasses.split( /\s+/ ).filter( Boolean ).forEach(
             c => classes.add( c )
