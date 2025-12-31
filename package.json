@@ -21,17 +21,17 @@
   "dependencies": {
     "cookie-parser": "^1.4.7",
     "deepmerge": "^4.3.1",
-    "express": "^5.1.0",
-    "i18next": "^25.5.2",
-    "i18next-fs-backend": "^2.6.0",
-    "i18next-http-middleware": "^3.8.0",
-    "js-yaml": "^4.1.0",
+    "express": "^5.2.1",
+    "i18next": "^25.7.3",
+    "i18next-fs-backend": "^2.6.1",
+    "i18next-http-middleware": "^3.9.2",
+    "js-yaml": "^4.1.1",
     "pug": "^3.0.3"
   },
   "devDependencies": {
     "@airportmap/types": "github:airportmap/types",
     "@types/cookie-parser": "^1.4.10",
-    "@types/express": "^5.0.3",
+    "@types/express": "^5.0.6",
     "@types/js-yaml": "^4.0.9",
     "tsc-alias": "^1.8.16",
     "typescript": "^5.9.3"
