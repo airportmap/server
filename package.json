@@ -22,11 +22,11 @@
     "cookie-parser": "^1.4.7",
     "deepmerge": "^4.3.1",
     "express": "^5.2.1",
-    "i18next": "^25.8.17",
+    "i18next": "^25.8.18",
     "i18next-fs-backend": "^2.6.1",
     "i18next-http-middleware": "^3.9.2",
     "js-yaml": "^4.1.1",
-    "pug": "^3.0.3"
+    "pug": "^3.0.4"
   },
   "devDependencies": {
     "@airportmap/types": "github:airportmap/types",
