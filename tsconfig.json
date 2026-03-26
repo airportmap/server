@@ -1,10 +1,9 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
-      "@server/core/*": [ "src/core/*" ],
-      "@server/helper/*": [ "src/helper/*" ],
-      "@server/mods/*": [ "src/mods/*" ]
+      "@server/core/*": [ "./src/core/*" ],
+      "@server/helper/*": [ "./src/helper/*" ],
+      "@server/mods/*": [ "./src/mods/*" ]
     }
   }
 }
