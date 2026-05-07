@@ -33,7 +33,7 @@
     "@types/cookie-parser": "^1.4.10",
     "@types/express": "^5.0.6",
     "@types/js-yaml": "^4.0.9",
-    "tsc-alias": "^1.8.16",
+    "tsc-alias": "^1.8.17",
     "typescript": "^6.0.3"
   }
 }
